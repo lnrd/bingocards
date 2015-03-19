@@ -1,0 +1,31 @@
+from random import *
+
+def gerar_cartela():
+
+	b = []
+	i = []
+	n = []
+	g = []
+	o = []
+
+	b.append(sample(range(1,16),5))
+	i.append(sample(range(16,31),5))
+	n.append(sample(range(31,46),5))
+	g.append(sample(range(46,61),5))
+	o.append(sample(range(61,76),5))
+
+	cartela = b + i + n + g + o
+	
+	for x in cartela:
+		
+		print(x)
+
+def vezes(n):
+	
+	for q in range(n):
+		print("""
+	B I N G O - %s
+		""" %q)
+		gerar_cartela()
+
+print (vezes(9))
