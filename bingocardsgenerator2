@@ -1,0 +1,91 @@
+from random import sample
+from random import choice
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+
+pdfmetrics.registerFont(TTFont('RobotoCondensed-Regular', 'RobotoCondensed-Regular.ttf'))
+pdfmetrics.registerFont(TTFont('RobotoCondensed-Light', 'RobotoCondensed-Light.ttf'))
+
+
+doc = SimpleDocTemplate("cartoes.pdf", pagesize=letter)
+
+
+
+def gerar_cartela():
+
+	B = list(range(1,16))
+	I = list(range(16,31))
+	N = list(range(31,46))
+	G = list(range(46,66))
+	O = list(range(66,76))
+
+	B1 = list(sample(B,5))
+	I1 = list(sample(I,5))
+	N1 = list(sample(N,4))
+	G1 =list(sample(G,5))
+	O1 =list(sample(O,5))
+
+	linha = ["B","I","N","G","O"]
+
+	data= [linha,
+       [B1[0],I1[0],N1[0],G1[0],O1[0]],
+       [B1[1],I1[1],N1[1],G1[1],O1[1]],
+       [B1[2],I1[2],"X",G1[2],O1[2]],
+       [B1[3],I1[3],N1[2],G1[3],O1[3]],
+       [B1[4],I1[4],N1[3],G1[4],O1[4]],
+
+       ]
+
+
+
+	
+	return(data)
+def vezes(numero):
+
+	cartelas = []
+	count = 0
+
+	while count<numero:
+
+		cartelas = cartelas + gerar_cartela()
+		count = count + 1
+
+	return(cartelas)
+
+
+# container for the 'Flowable' objects
+elements = []
+
+
+
+
+def estilos_de_cartela(n):
+	cores = ["blue","green","orange","grey","red"]
+	lista = list(range(n))
+	for x in lista:
+		cores_da_marca = ['#3a6774','#51743a','#744f3a','#743a72','#3a6374']
+		x = Table(vezes(1))
+		x.setStyle(TableStyle([('BACKGROUND',(0,0),(5,6),colors.white),
+						('BACKGROUND',(0,0),(5,0),choice(cores_da_marca)),
+						('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
+                       ('BOX', (0,0), (-1,-1), 1.5, colors.black),
+                       ('TOPPADDING',(0,0),(-1,-1),15),
+                       ('LEFTPADDING',(0,0),(-1,-1),15),
+                       ('RIGHTPADDING',(0,0),(-1,-1),15),
+						('BOTTOMPADDING',(0,0),(-1,-1),15),
+						('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
+						('ALIGN',(0,0),(-1,-1),'CENTER'),							
+						('SIZE',(0,0),(-1,-1),24),
+						('FACE',(0,0),(-1,-1),'RobotoCondensed-Regular'),]))
+		elements.append(x)
+
+
+
+estilos_de_cartela(100)
+
+
+# write the document to disk
+doc.build(elements)
